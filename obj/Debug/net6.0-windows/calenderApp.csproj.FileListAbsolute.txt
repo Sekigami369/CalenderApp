@@ -1,0 +1,17 @@
+C:\Users\skgmy\source\repos\calenderApp\bin\Debug\net6.0-windows\calenderApp.exe
+C:\Users\skgmy\source\repos\calenderApp\bin\Debug\net6.0-windows\calenderApp.deps.json
+C:\Users\skgmy\source\repos\calenderApp\bin\Debug\net6.0-windows\calenderApp.runtimeconfig.json
+C:\Users\skgmy\source\repos\calenderApp\bin\Debug\net6.0-windows\calenderApp.dll
+C:\Users\skgmy\source\repos\calenderApp\bin\Debug\net6.0-windows\calenderApp.pdb
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\calenderApp.csproj.AssemblyReference.cache
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\calenderApp.Form1.resources
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\calenderApp.csproj.GenerateResource.cache
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\calenderApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\calenderApp.AssemblyInfoInputs.cache
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\calenderApp.AssemblyInfo.cs
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\calenderApp.csproj.CoreCompileInputs.cache
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\calenderApp.dll
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\refint\calenderApp.dll
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\calenderApp.pdb
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\calenderApp.genruntimeconfig.cache
+C:\Users\skgmy\source\repos\calenderApp\obj\Debug\net6.0-windows\ref\calenderApp.dll
