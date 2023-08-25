@@ -1,3 +1,6 @@
+using System.Data.SqlClient;
+
+
 namespace calenderApp
 {
     public partial class Form1 : Form
@@ -9,7 +12,11 @@ namespace calenderApp
         Label namelabel5 = new Label();
         Label namelabel6 = new Label();
         Label namelabel7 = new Label();
+        DbHelper dbHelper = new DbHelper();
 
+        String selectQuery = "SELECT Status FROM dateSchedule Whe ;";
+        String upDateQuery = "UPDATE ;";
+        String insertQuery = "INSERT INTO ()VALUES();";
 
         public Form1()
         {
@@ -19,6 +26,8 @@ namespace calenderApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            dbHelper.ExecuteNonQuery(selectQuery);
+
             tableLayoutPanel1.ColumnCount = 36;
             tableLayoutPanel1.RowCount = 30;
 
