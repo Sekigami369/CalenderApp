@@ -1,10 +1,11 @@
 using System.Data.SqlClient;
-
+using System.Drawing.Text;
 
 namespace calenderApp
 {
     public partial class Form1 : Form
     {
+        int[,] dataGrid;
         Label namelabel1 = new Label();
         Label namelabel2 = new Label();
         Label namelabel3 = new Label();
@@ -12,7 +13,7 @@ namespace calenderApp
         Label namelabel5 = new Label();
         Label namelabel6 = new Label();
         Label namelabel7 = new Label();
-        DbHelper dbHelper = new DbHelper();
+        //DbHelper dbHelper = new DbHelper();
 
         String selectQuery = "SELECT Status FROM dateSchedule Whe ;";
         String upDateQuery = "UPDATE ;";
@@ -26,7 +27,7 @@ namespace calenderApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            dbHelper.ExecuteNonQuery(selectQuery);
+            //dbHelper.ExecuteNonQuery(selectQuery);
 
             tableLayoutPanel1.ColumnCount = 36;
             tableLayoutPanel1.RowCount = 30;
@@ -70,62 +71,45 @@ namespace calenderApp
                 tableLayoutPanel1.Controls.Add(dateLabel, i, 0);
                 currentDate = currentDate.AddDays(1);
             }
+            /*
             for (int i = 1; i < 32; i++)
             {
                 Button button = new Button();
                 button.Text = "s" + i;
                 button.Dock = DockStyle.Fill;
                 tableLayoutPanel1.Controls.Add(button, i, 1);
-
             }
-            for (int i = 1; i < 32; i++)
+            */
+
+            dataGrid = new int[31, 7];
+            for(int i = 0; i < 31; i++)
             {
-                Button button2 = new Button();
-                button2.Text = "f" + i;
-                button2.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(button2, i, 2);
-            }
+                for(int j = 0; j < 7; j++)
+                {
+                    Label label = new Label();
+                    label.Text = dataGrid[i, j].ToString();
+                    label.Dock = DockStyle.Fill;
+                    label.TextAlign = ContentAlignment.MiddleCenter;
+                        //ラベルのテキスト配置を中央センターに指定
+                    label.Click += Datalabel_Click;
+                        //セル内のクリックイベントにメソッドを追加
 
-            for (int i = 1; i < 32; i++)
-            {
-                Button button2 = new Button();
-                button2.Text = "g" + i;
-                button2.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(button2, i, 3);
-            }
+                    tableLayoutPanel1.Controls.Add(label, i + 1, j + 1);
 
-            for (int i = 1; i < 32; i++)
-            {
-                Button button2 = new Button();
-                button2.Text = "h" + i;
-                button2.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(button2, i, 4);
+                }
             }
+            
+        }
+        private void Datalabel_Click(object sender, EventArgs e)
+        {
+            Label clickedLabel = (Label)sender;
 
-            for (int i = 1; i < 32; i++)
-            {
-                Button button2 = new Button();
-                button2.Text = "j" + i;
-                button2.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(button2, i, 5);
-            }
+            int row = tableLayoutPanel1.GetRow(clickedLabel);
+            int column = tableLayoutPanel1.GetColumn(clickedLabel);
+            dataGrid[column - 1, row - 1] = 1 - dataGrid[column - 1, row - 1];
+                //tableLayoutのセル番号と配列のindex番号は合わないので-1して使っている
 
-
-            for (int i = 1; i < 32; i++)
-            {
-                Button button2 = new Button();
-                button2.Text = "l" + i;
-                button2.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(button2, i, 6);
-            }
-
-            for (int i = 1; i < 32; i++)
-            {
-                Button button2 = new Button();
-                button2.Text = "a" + i;
-                button2.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(button2, i, 7);
-            }
+            clickedLabel.Text = dataGrid[column - 1, row - 1].ToString();
         }
 
 
