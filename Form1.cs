@@ -6,6 +6,7 @@ namespace calenderApp
     public partial class Form1 : Form
     {
         int[,] dataGrid;
+        private string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
         Label namelabel1 = new Label();
         Label namelabel2 = new Label();
         Label namelabel3 = new Label();
@@ -13,11 +14,7 @@ namespace calenderApp
         Label namelabel5 = new Label();
         Label namelabel6 = new Label();
         Label namelabel7 = new Label();
-        //DbHelper dbHelper = new DbHelper();
 
-        String selectQuery = "SELECT Status FROM dateSchedule Whe ;";
-        String upDateQuery = "UPDATE ;";
-        String insertQuery = "INSERT INTO ()VALUES();";
 
         public Form1()
         {
@@ -27,7 +24,6 @@ namespace calenderApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //dbHelper.ExecuteNonQuery(selectQuery);
 
             tableLayoutPanel1.ColumnCount = 36;
             tableLayoutPanel1.RowCount = 30;
@@ -63,12 +59,12 @@ namespace calenderApp
 
 
             DateTime currentDate = DateTime.Now;
-            for (int i = 1; i < 32; i++)
+            for (int i = 0; i < 31; i++)
             {
                 Label dateLabel = new Label();
                 dateLabel.Text = currentDate.Day.ToString();
                 dateLabel.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(dateLabel, i, 0);
+                tableLayoutPanel1.Controls.Add(dateLabel, i + 1, 0);
                 currentDate = currentDate.AddDays(1);
             }
             /*
@@ -80,25 +76,50 @@ namespace calenderApp
                 tableLayoutPanel1.Controls.Add(button, i, 1);
             }
             */
-
+            /*
             dataGrid = new int[31, 7];
-            for(int i = 0; i < 31; i++)
+            for (int i = 0; i < 31; i++)
             {
-                for(int j = 0; j < 7; j++)
+                for (int j = 0; j < 7; j++)
                 {
                     Label label = new Label();
                     label.Text = dataGrid[i, j].ToString();
                     label.Dock = DockStyle.Fill;
-                    label.TextAlign = ContentAlignment.MiddleCenter;
-                        //ラベルのテキスト配置を中央センターに指定
+                    //label.TextAlign = ContentAlignment.MiddleCenter;
+                    //ラベルのテキスト配置を中央センターに指定
                     label.Click += Datalabel_Click;
-                        //セル内のクリックイベントにメソッドを追加
+                    //セル内のクリックイベントにメソッドを追加
 
                     tableLayoutPanel1.Controls.Add(label, i + 1, j + 1);
 
                 }
             }
+            */
             
+            for(int i = 0; i < 32; i++)
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    String selectQuery = "SELECT Status FROM dateSchedule Where Dates = DATEADD(day, @i, GETDATE());";
+                    using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                    {
+                        connection.Open();
+                        command.Parameters.AddWithValue("@i",i);
+                        object dateStatus = command.ExecuteScalar();//ここの値がnullだからうまくいかない
+                        if (dateStatus != null)
+                        {
+                            Label dateLabel = new Label();
+                            dateLabel.Text = dateStatus.ToString();
+                            dateLabel.Dock = DockStyle.Fill;
+                            dateLabel.Click += Datalabel_Click;
+                            tableLayoutPanel1.Controls.Add(dateLabel, i , 1);
+                        }
+                    }
+                }
+            }
+           
+
+
         }
         private void Datalabel_Click(object sender, EventArgs e)
         {
@@ -107,7 +128,7 @@ namespace calenderApp
             int row = tableLayoutPanel1.GetRow(clickedLabel);
             int column = tableLayoutPanel1.GetColumn(clickedLabel);
             dataGrid[column - 1, row - 1] = 1 - dataGrid[column - 1, row - 1];
-                //tableLayoutのセル番号と配列のindex番号は合わないので-1して使っている
+            //tableLayoutのセル番号と配列のindex番号は合わないので-1して使っている
 
             clickedLabel.Text = dataGrid[column - 1, row - 1].ToString();
         }
