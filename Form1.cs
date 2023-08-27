@@ -105,7 +105,6 @@ namespace calenderApp
                 String selectQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate;";
                 for (int i = 0; i < 31; i++)
                 {
-                    
                     using (SqlCommand command = new SqlCommand(selectQuery, connection))
                     {
                         command.Parameters.AddWithValue("@targetDate", targetDate);
@@ -132,10 +131,30 @@ namespace calenderApp
 
             int row = tableLayoutPanel1.GetRow(clickedLabel);
             int column = tableLayoutPanel1.GetColumn(clickedLabel);
-            dataGrid[column - 1, row - 1] = 1 - dataGrid[column - 1, row - 1];
-            //tableLayoutのセル番号と配列のindex番号は合わないので-1して使っている
-
-            clickedLabel.Text = dataGrid[column - 1, row - 1].ToString();
+           
+            using(SqlConnection connection = new SqlConnection(connectionString))
+            {
+                DateTime targetDate = DateTime.Now.Date;
+                targetDate = targetDate.AddDays(column);
+                string StatusVal = "1";
+                string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate;";
+                using(SqlCommand command = new SqlCommand(query, connection))
+                {
+                    if(clickedLabel.Text == "1")
+                    {
+                        StatusVal = "0";
+                    }
+                    else
+                    {
+                        StatusVal = "1";
+                    }
+                    connection.Open();
+                    command.Parameters.AddWithValue("@targetDate", targetDate);
+                    command.Parameters.AddWithValue("@Status", StatusVal);
+                    command.ExecuteScalar();
+                    MessageBox.Show("更新されました。");
+                }
+            }
         }
 
 
