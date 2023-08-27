@@ -1,10 +1,10 @@
 using System.Data.SqlClient;
-using System.Drawing.Text;
 
 namespace calenderApp
 {
     public partial class Form1 : Form
     {
+        DateTime currentDate = DateTime.Now.Date;
         int[,] dataGrid;
         private string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
         Label namelabel1 = new Label();
@@ -20,6 +20,7 @@ namespace calenderApp
         {
             InitializeComponent();
             Load += Form1_Load;
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -58,9 +59,8 @@ namespace calenderApp
             tableLayoutPanel1.Controls.Add(namelabel7, 0, 7);
 
 
-            DateTime currentDate = DateTime.Now;
             for (int i = 0; i < 31; i++)
-            {
+            {                
                 Label dateLabel = new Label();
                 dateLabel.Text = currentDate.Day.ToString();
                 dateLabel.Dock = DockStyle.Fill;
@@ -95,30 +95,35 @@ namespace calenderApp
                 }
             }
             */
-            
-            for(int i = 0; i < 32; i++)
+
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                DateTime targetDate = DateTime.Now.Date;
+                connection.Open();
+                String selectQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate;";
+                for (int i = 0; i < 31; i++)
                 {
-                    String selectQuery = "SELECT Status FROM dateSchedule Where Dates = DATEADD(day, @i, GETDATE());";
+                    
                     using (SqlCommand command = new SqlCommand(selectQuery, connection))
                     {
-                        connection.Open();
-                        command.Parameters.AddWithValue("@i",i);
-                        object dateStatus = command.ExecuteScalar();//‚±‚±‚Ì’l‚ªnull‚¾‚©‚ç‚¤‚Ü‚­‚¢‚©‚È‚¢
-                        if (dateStatus != null)
+                        command.Parameters.AddWithValue("@targetDate", targetDate);
+                        Object dateStatus = command.ExecuteScalar();
+
+                        if(dateStatus != null)
                         {
                             Label dateLabel = new Label();
                             dateLabel.Text = dateStatus.ToString();
                             dateLabel.Dock = DockStyle.Fill;
                             dateLabel.Click += Datalabel_Click;
-                            tableLayoutPanel1.Controls.Add(dateLabel, i , 1);
+                            tableLayoutPanel1.Controls.Add(dateLabel, i, 1);
+                            targetDate = targetDate.AddDays(1);
                         }
                     }
+           
                 }
             }
-           
-
 
         }
         private void Datalabel_Click(object sender, EventArgs e)
@@ -138,5 +143,6 @@ namespace calenderApp
         {
 
         }
+
     }
 }
