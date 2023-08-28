@@ -104,7 +104,6 @@ namespace calenderApp
                         MessageBox.Show("更新されました。","確認", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         UpDateLabel(row, column, StatusVal);
-
                     }
                 }
             }
@@ -114,7 +113,6 @@ namespace calenderApp
         {
             Control control = tableLayoutPanel1.GetControlFromPosition(columun + 1, row);
             if (control is Label label)    //パターンマッチでcontrolがLabelにキャストできるかチェックしている
-
             {
                 label.Text = status;
             }
