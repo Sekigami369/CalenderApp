@@ -20,7 +20,7 @@ namespace calenderApp
         {
             InitializeComponent();
             Load += Form1_Load;
-            
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -60,69 +60,15 @@ namespace calenderApp
 
 
             for (int i = 0; i < 31; i++)
-            {                
+            {
                 Label dateLabel = new Label();
                 dateLabel.Text = currentDate.Day.ToString();
                 dateLabel.Dock = DockStyle.Fill;
                 tableLayoutPanel1.Controls.Add(dateLabel, i + 1, 0);
                 currentDate = currentDate.AddDays(1);
             }
-            /*
-            for (int i = 1; i < 32; i++)
-            {
-                Button button = new Button();
-                button.Text = "s" + i;
-                button.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(button, i, 1);
-            }
-            */
-            /*
-            dataGrid = new int[31, 7];
-            for (int i = 0; i < 31; i++)
-            {
-                for (int j = 0; j < 7; j++)
-                {
-                    Label label = new Label();
-                    label.Text = dataGrid[i, j].ToString();
-                    label.Dock = DockStyle.Fill;
-                    //label.TextAlign = ContentAlignment.MiddleCenter;
-                    //ラベルのテキスト配置を中央センターに指定
-                    label.Click += Datalabel_Click;
-                    //セル内のクリックイベントにメソッドを追加
 
-                    tableLayoutPanel1.Controls.Add(label, i + 1, j + 1);
-
-                }
-            }
-            */
-
-
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                DateTime targetDate = DateTime.Now.Date;
-                connection.Open();
-                String selectQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate;";
-                for (int i = 0; i < 31; i++)
-                {
-                    using (SqlCommand command = new SqlCommand(selectQuery, connection))
-                    {
-                        command.Parameters.AddWithValue("@targetDate", targetDate);
-                        Object dateStatus = command.ExecuteScalar();
-
-                        if(dateStatus != null)
-                        {
-                            Label dateLabel = new Label();
-                            dateLabel.Text = dateStatus.ToString();
-                            dateLabel.Dock = DockStyle.Fill;
-                            dateLabel.Click += Datalabel_Click;
-                            tableLayoutPanel1.Controls.Add(dateLabel, i, 1);
-                            targetDate = targetDate.AddDays(1);
-                        }
-                    }
-           
-                }
-            }
+            SelectShowStatus();   //データベースからStatusの値を1行分取ってきて表示させる
 
         }
         private void Datalabel_Click(object sender, EventArgs e)
@@ -131,16 +77,16 @@ namespace calenderApp
 
             int row = tableLayoutPanel1.GetRow(clickedLabel);
             int column = tableLayoutPanel1.GetColumn(clickedLabel);
-           
-            using(SqlConnection connection = new SqlConnection(connectionString))
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 DateTime targetDate = DateTime.Now.Date;
                 targetDate = targetDate.AddDays(column);
                 string StatusVal = "1";
                 string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate;";
-                using(SqlCommand command = new SqlCommand(query, connection))
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    if(clickedLabel.Text == "1")
+                    if (clickedLabel.Text == "1")
                     {
                         StatusVal = "0";
                     }
@@ -153,10 +99,50 @@ namespace calenderApp
                     command.Parameters.AddWithValue("@Status", StatusVal);
                     command.ExecuteScalar();
                     MessageBox.Show("更新されました。");
+
+                    UpDateLabel(row, column, StatusVal);
                 }
             }
         }
 
+        private void UpDateLabel(int row, int columun, string status)    //クリックされたlabelだけ表示を更新するメソッド
+        {
+            Control control = tableLayoutPanel1.GetControlFromPosition(columun + 1, row);
+            if (control is Label label)    //パターンマッチでcontrolがLabelにキャストできるかチェックしている
+
+            {
+                label.Text = status;
+            }
+        }
+
+
+        private void SelectShowStatus()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                DateTime targetDate = DateTime.Now.Date;
+                connection.Open();
+                String selectQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate;";
+                for (int i = 0; i < 31; i++)
+                {
+                    using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@targetDate", targetDate);
+                        Object dateStatus = command.ExecuteScalar();
+
+                        if (dateStatus != null)
+                        {
+                            Label dateLabel = new Label();
+                            dateLabel.Text = dateStatus.ToString();
+                            dateLabel.Dock = DockStyle.Fill;
+                            dateLabel.Click += Datalabel_Click;
+                            tableLayoutPanel1.Controls.Add(dateLabel, i, 1);
+                            targetDate = targetDate.AddDays(1);
+                        }
+                    }
+                }
+            }
+        }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
