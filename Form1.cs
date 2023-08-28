@@ -5,7 +5,6 @@ namespace calenderApp
     public partial class Form1 : Form
     {
         DateTime currentDate = DateTime.Now.Date;
-        int[,] dataGrid;
         private string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
         Label namelabel1 = new Label();
         Label namelabel2 = new Label();
@@ -78,29 +77,35 @@ namespace calenderApp
             int row = tableLayoutPanel1.GetRow(clickedLabel);
             int column = tableLayoutPanel1.GetColumn(clickedLabel);
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            DialogResult result = MessageBox.Show("ステータスを変更しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (result == DialogResult.OK)
             {
-                DateTime targetDate = DateTime.Now.Date;
-                targetDate = targetDate.AddDays(column);
-                string StatusVal = "1";
-                string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate;";
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    if (clickedLabel.Text == "1")
+                    DateTime targetDate = DateTime.Now.Date;
+                    targetDate = targetDate.AddDays(column);
+                    string StatusVal = "1";
+                    string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate;";
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        StatusVal = "0";
-                    }
-                    else
-                    {
-                        StatusVal = "1";
-                    }
-                    connection.Open();
-                    command.Parameters.AddWithValue("@targetDate", targetDate);
-                    command.Parameters.AddWithValue("@Status", StatusVal);
-                    command.ExecuteScalar();
-                    MessageBox.Show("更新されました。");
+                        if (clickedLabel.Text == "1")
+                        {
+                            StatusVal = "0";
+                        }
+                        else
+                        {
+                            StatusVal = "1";
+                        }
 
-                    UpDateLabel(row, column, StatusVal);
+                        connection.Open();
+                        command.Parameters.AddWithValue("@targetDate", targetDate);
+                        command.Parameters.AddWithValue("@Status", StatusVal);
+                        command.ExecuteScalar();
+                        MessageBox.Show("更新されました。","確認", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        UpDateLabel(row, column, StatusVal);
+
+                    }
                 }
             }
         }
