@@ -81,6 +81,11 @@ namespace calenderApp
             DialogResult result = MessageBox.Show("ステータスを変更しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (result == DialogResult.OK)
             {
+                //var customDialog = new CustomDialog();
+                //DialogResult result2 = customDialog.ShowDialog();
+
+                //if (result2 == )
+
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     DateTime targetDate = DateTime.Now.Date;
@@ -122,6 +127,10 @@ namespace calenderApp
                 else if (status == 0)
                 {
                     label.BackColor = Color.Blue;
+                }
+                else if (status == 2)
+                {
+                    label.BackColor = Color.Yellow;
                 }
             }
         }
