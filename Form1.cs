@@ -1,4 +1,5 @@
 using System.Data.SqlClient;
+using System.Threading.Tasks.Dataflow;
 
 namespace calenderApp
 {
@@ -84,17 +85,17 @@ namespace calenderApp
                 {
                     DateTime targetDate = DateTime.Now.Date;
                     targetDate = targetDate.AddDays(column);
-                    string StatusVal = "1";
+                    int StatusVal = 1;
                     string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate;";
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        if (clickedLabel.Text == "1")
+                        if (clickedLabel.BackColor == Color.Red)
                         {
-                            StatusVal = "0";
+                            StatusVal = 0;
                         }
                         else
                         {
-                            StatusVal = "1";
+                            StatusVal = 1;
                         }
 
                         connection.Open();
@@ -109,12 +110,19 @@ namespace calenderApp
             }
         }
 
-        private void UpDateLabel(int row, int columun, string status)    //クリックされたlabelだけ表示を更新するメソッド
+        private void UpDateLabel(int row, int columun, int status)    //クリックされたlabelだけ表示を更新するメソッド
         {
             Control control = tableLayoutPanel1.GetControlFromPosition(columun + 1, row);
             if (control is Label label)    //パターンマッチでcontrolがLabelにキャストできるかチェックしている
             {
-                label.Text = status;
+                if(status == 1)
+                {
+                    label.BackColor = Color.Red;
+                }
+                else if (status == 0)
+                {
+                    label.BackColor = Color.Blue;
+                }
             }
         }
 
@@ -136,7 +144,15 @@ namespace calenderApp
                         if (dateStatus != null)
                         {
                             Label dateLabel = new Label();
-                            dateLabel.Text = dateStatus.ToString();
+                            if((int)dateStatus == 1)
+                            {
+                                dateLabel.BackColor = Color.Red;
+                            }
+                            else if((int)dateStatus == 0)
+                            {
+                                dateLabel.BackColor = Color.Blue;
+                            }
+                            //dateLabel.Text = dateStatus.ToString();
                             dateLabel.Dock = DockStyle.Fill;
                             dateLabel.Click += Datalabel_Click;
                             tableLayoutPanel1.Controls.Add(dateLabel, i, 1);
