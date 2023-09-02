@@ -33,6 +33,7 @@
             radioButton2 = new RadioButton();
             radioButton3 = new RadioButton();
             button1 = new Button();
+            button2 = new Button();
             SuspendLayout();
             // 
             // label1
@@ -83,7 +84,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(209, 183);
+            button1.Location = new Point(106, 188);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 4;
@@ -91,11 +92,22 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
+            // button2
+            // 
+            button2.Location = new Point(305, 188);
+            button2.Name = "button2";
+            button2.Size = new Size(75, 23);
+            button2.TabIndex = 5;
+            button2.Text = "キャンセル";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
             // CustomDialog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(499, 266);
+            Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(radioButton3);
             Controls.Add(radioButton2);
@@ -107,6 +119,8 @@
             PerformLayout();
         }
 
+
+
         #endregion
 
         private Label label1;
@@ -114,7 +128,6 @@
         private RadioButton radioButton2;
         private RadioButton radioButton3;
         private Button button1;
-
-        
+        private Button button2;
     }
 }

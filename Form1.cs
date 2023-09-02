@@ -1,5 +1,4 @@
 using System.Data.SqlClient;
-using System.Threading.Tasks.Dataflow;
 
 namespace calenderApp
 {
@@ -81,46 +80,54 @@ namespace calenderApp
             DialogResult result = MessageBox.Show("ステータスを変更しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (result == DialogResult.OK)
             {
-                //var customDialog = new CustomDialog();
-                //DialogResult result2 = customDialog.ShowDialog();
+                var customDialog = new CustomDialog();
+                customDialog.ShowDialog();
+                int result2 = customDialog.returnValue;//ラジオボタンの値を格納している
 
-                //if (result2 == )
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     DateTime targetDate = DateTime.Now.Date;
-                    targetDate = targetDate.AddDays(column);
+                    targetDate = targetDate.AddDays(column -1);
+                    int UserID = row + 1000;
                     int StatusVal = 1;
-                    string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate;";
+                    string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate AND UserID = @UserID;";//ラジオボタンの値をStatusのあたいとして更新する
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        if (clickedLabel.BackColor == Color.Red)
+
+                        if (result2 == 0)
                         {
                             StatusVal = 0;
                         }
-                        else
+                        else if (result2 == 1)
                         {
                             StatusVal = 1;
                         }
+                        else if (result2 == 2)
+                        {
+                            StatusVal = 2;
+                        }
+
 
                         connection.Open();
+                        command.Parameters.AddWithValue("@UserID", UserID);
                         command.Parameters.AddWithValue("@targetDate", targetDate);
                         command.Parameters.AddWithValue("@Status", StatusVal);
                         command.ExecuteScalar();
-                        MessageBox.Show("更新されました。","確認", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("更新されました。", "確認", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         UpDateLabel(row, column, StatusVal);
                     }
-                }
+                }// customDialog.ShowDialog();の更新ボタンが押されたらUPDATEを実行するように改良する。
             }
         }
 
         private void UpDateLabel(int row, int columun, int status)    //クリックされたlabelだけ表示を更新するメソッド
         {
-            Control control = tableLayoutPanel1.GetControlFromPosition(columun + 1, row);
+            Control control = tableLayoutPanel1.GetControlFromPosition(columun , row);
             if (control is Label label)    //パターンマッチでcontrolがLabelにキャストできるかチェックしている
             {
-                if(status == 1)
+                if (status == 2)
                 {
                     label.BackColor = Color.Red;
                 }
@@ -128,43 +135,57 @@ namespace calenderApp
                 {
                     label.BackColor = Color.Blue;
                 }
-                else if (status == 2)
+                else if (status == 1)
                 {
                     label.BackColor = Color.Yellow;
                 }
             }
         }
 
-
+        
         private void SelectShowStatus()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                DateTime targetDate = DateTime.Now.Date;
+                
+                
                 connection.Open();
-                String selectQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate;";
-                for (int i = 0; i < 31; i++)
+                String selectQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate and UserID = @UserID;";
+                for (int j = 1; j < 8; j++)
                 {
-                    using (SqlCommand command = new SqlCommand(selectQuery, connection))
-                    {
-                        command.Parameters.AddWithValue("@targetDate", targetDate);
-                        Object dateStatus = command.ExecuteScalar();
+                    DateTime targetDate = DateTime.Now.Date;
 
-                        if (dateStatus != null)
+                    for (int i = 1; i < 32; i++)
+                    {
+                        using (SqlCommand command = new SqlCommand(selectQuery, connection))
                         {
-                            Label dateLabel = new Label();
-                            if((int)dateStatus == 1)
+                            int UserID = 1000 + j;
+                            command.Parameters.AddWithValue("@UserID", UserID);
+                            command.Parameters.AddWithValue("@targetDate", targetDate);
+                            Object dateStatus = command.ExecuteScalar();
+
+                            if (dateStatus != null)
                             {
-                                dateLabel.BackColor = Color.Red;
-                            }
-                            else if((int)dateStatus == 0)
-                            {
-                                dateLabel.BackColor = Color.Blue;
-                            }
-                            //dateLabel.Text = dateStatus.ToString();
-                            dateLabel.Dock = DockStyle.Fill;
-                            dateLabel.Click += Datalabel_Click;
-                            tableLayoutPanel1.Controls.Add(dateLabel, i, 1);
+                                Label dateLabel = new Label();
+                               
+                                if ((int)dateStatus == 0)
+                                {
+                                    dateLabel.BackColor = Color.Blue;
+                                }
+                                else if ((int)dateStatus == 1)
+                                {
+                                    dateLabel.BackColor = Color.Yellow;
+                                }
+                                else if ((int)dateStatus == 2)
+                                {
+                                    dateLabel.BackColor = Color.Red;
+                                }
+
+                                dateLabel.Dock = DockStyle.Fill;
+                                dateLabel.Click += Datalabel_Click;
+                                tableLayoutPanel1.Controls.Add(dateLabel, i, j);
+                                
+                            }       
                             targetDate = targetDate.AddDays(1);
                         }
                     }
