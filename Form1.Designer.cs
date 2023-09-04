@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
+            dateTimePicker1 = new DateTimePicker();
+            button1 = new Button();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -66,7 +68,7 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
-            tableLayoutPanel1.Location = new Point(12, 42);
+            tableLayoutPanel1.Location = new Point(12, 81);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 9;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
@@ -82,11 +84,31 @@
             tableLayoutPanel1.TabIndex = 1;
             tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
             // 
+            // dateTimePicker1
+            // 
+            dateTimePicker1.Location = new Point(601, 40);
+            dateTimePicker1.Name = "dateTimePicker1";
+            dateTimePicker1.Size = new Size(200, 23);
+            dateTimePicker1.TabIndex = 2;
+            dateTimePicker1.ValueChanged += dateTimePicker1_ValueChanged;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(817, 40);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 3;
+            button1.Text = "日付変更";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1038, 581);
+            Controls.Add(button1);
+            Controls.Add(dateTimePicker1);
             Controls.Add(tableLayoutPanel1);
             Name = "Form1";
             Text = "Form1";
@@ -95,5 +117,7 @@
 
         #endregion
         private TableLayoutPanel tableLayoutPanel1;
+        private DateTimePicker dateTimePicker1;
+        private Button button1;
     }
 }
