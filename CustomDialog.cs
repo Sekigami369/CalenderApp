@@ -34,6 +34,7 @@ namespace calenderApp
 
         private void button1_Click(object sender, EventArgs e)
         {
+           
             if (radioButton1.Checked == true)
             {
                 returnValue = 0;
@@ -46,6 +47,7 @@ namespace calenderApp
             {
                 returnValue = 2;
             }
+
             this.Close();
         }
 

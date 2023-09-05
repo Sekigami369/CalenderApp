@@ -78,16 +78,17 @@ namespace calenderApp
         }
         private void Datalabel_Click(object sender, EventArgs e)
         {
+
             Panel clickedPanel = (Panel)sender;
 
             int row = tableLayoutPanel1.GetRow(clickedPanel);
             int column = tableLayoutPanel1.GetColumn(clickedPanel);
-
             DialogResult result = MessageBox.Show("ステータスを変更しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (result == DialogResult.OK)
             {
                 var customDialog = new CustomDialog();
                 customDialog.ShowDialog();
+
                 int result2 = customDialog.returnValue;//ラジオボタンの値を格納している
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -122,7 +123,12 @@ namespace calenderApp
 
                         UpDatePanel(row, column, StatusVal);
                     }
-                }// customDialog.ShowDialog();の更新ボタンが押されたらUPDATEを実行するように改良する。
+                }
+            }
+        
+            else
+            {
+                     this.Close();
             }
         }
 
