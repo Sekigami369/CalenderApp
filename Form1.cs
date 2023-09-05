@@ -210,21 +210,37 @@ namespace calenderApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-           // changedDateStatus();
+            changedDateStatus();
         }
        // テーブルの表示をいったんクリアにしないとうまくかない
 
-        /*
+        
         private void changedDateStatus()
         {
-            for (int k = 0; k < 31; k++)
+            DateTime dateTime = dateTimePicker1.Value;
+
+            for (int i = 0; i < 8; i++)
             {
-                DateTime changeDate = DateTime.Now.Date;
-                Label dateLabel = new Label();
-                dateLabel.Text = changeDate.Day.ToString();
-                dateLabel.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(dateLabel, k + 1, 0);
-                changeDate = changeDate.AddDays(1);
+                for (int j = 1; j < 32; j++)
+                {
+                    int rowIndexRemove = i;
+                    int columnIndexRemove = j;
+                    Control controlToRemove = tableLayoutPanel1.GetControlFromPosition(columnIndexRemove, rowIndexRemove);
+                    if(controlToRemove != null)
+                    {
+                        tableLayoutPanel1.Controls.Remove(controlToRemove); 
+                    }
+
+                }
+            }
+            for(int k = 1; k < 32; k++)
+            {
+               
+                Label label = new Label();
+                label.Text = dateTime.Day.ToString();
+                label.Dock = DockStyle.Fill;
+                tableLayoutPanel1.Controls.Add(label, k, 0);
+                dateTime = dateTime.AddDays(1);
             }
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -272,6 +288,6 @@ namespace calenderApp
                 }
             }
         }
-        */
+        
     }
 }
