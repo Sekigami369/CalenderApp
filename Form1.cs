@@ -4,7 +4,7 @@ namespace calenderApp
 {
     public partial class Form1 : Form
     {
-        
+
         DateTime currentDate = DateTime.Now.Date;
         private string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
         Label namelabel1 = new Label();
@@ -14,7 +14,7 @@ namespace calenderApp
         Label namelabel5 = new Label();
         Label namelabel6 = new Label();
         Label namelabel7 = new Label();
-        Form1 form1;
+        CustomDialog customDialog;
 
 
         public Form1()
@@ -80,19 +80,46 @@ namespace calenderApp
         }
         private void Datalabel_Click(object sender, EventArgs e)
         {
+            DialogResult result = MessageBox.Show("ステータスを変更しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (result == DialogResult.OK)
+            {
+                customDialog = new CustomDialog();
+                customDialog.ShowDialog();
+            }
+        }
 
+        private void UpDatePanel(int row, int columun, int status)    //クリックされたlabelだけ表示を更新するメソッド
+        {
+            Control control = tableLayoutPanel1.GetControlFromPosition(columun, row);
+            if (control is Panel panel)    //パターンマッチでcontrolがLabelにキャストできるかチェックしている
+            {
+
+                if (status == 0)
+                {
+                    panel.BackColor = Color.Blue;
+                }
+                else if (status == 1)
+                {
+                    panel.BackColor = Color.Yellow;
+                }
+                else if (status == 2)
+                {
+                    panel.BackColor = Color.Red;
+                }
+            }
+        }
+
+        public void PanelClick(object sender, EventArgs e)
+        {
             Panel clickedPanel = (Panel)sender;
 
             int row = tableLayoutPanel1.GetRow(clickedPanel);
             int column = tableLayoutPanel1.GetColumn(clickedPanel);
-            DialogResult result = MessageBox.Show("ステータスを変更しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-            if (result == DialogResult.OK)
+
             {
-                var customDialog = new CustomDialog(form1);
-                customDialog.ShowDialog();
-            }
-        }
-            /*
+
+                int result2 = customDialog.returnVal;
+
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     DateTime targetDate = DateTime.Now.Date;
@@ -126,31 +153,8 @@ namespace calenderApp
                         UpDatePanel(row, column, StatusVal);
                     }
                 }
-            }       
-        }
-
-        private void UpDatePanel(int row, int columun, int status)    //クリックされたlabelだけ表示を更新するメソッド
-        {
-            Control control = tableLayoutPanel1.GetControlFromPosition(columun, row);
-            if (control is Panel panel)    //パターンマッチでcontrolがLabelにキャストできるかチェックしている
-            {
-
-                if (status == 0)
-                {
-                    panel.BackColor = Color.Blue;
-                }
-                else if (status == 1)
-                {
-                    panel.BackColor = Color.Yellow;
-                }
-                else if (status == 2)
-                {
-                    panel.BackColor = Color.Red;
-                }
             }
         }
-
-*/
         private void SelectShowStatus()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
