@@ -4,6 +4,7 @@ namespace calenderApp
 {
     public partial class Form1 : Form
     {
+        
         DateTime currentDate = DateTime.Now.Date;
         private string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
         Label namelabel1 = new Label();
@@ -13,6 +14,7 @@ namespace calenderApp
         Label namelabel5 = new Label();
         Label namelabel6 = new Label();
         Label namelabel7 = new Label();
+        Form1 form1;
 
 
         public Form1()
@@ -86,11 +88,11 @@ namespace calenderApp
             DialogResult result = MessageBox.Show("ステータスを変更しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (result == DialogResult.OK)
             {
-                var customDialog = new CustomDialog();
+                var customDialog = new CustomDialog(form1);
                 customDialog.ShowDialog();
-
-                int result2 = customDialog.returnValue;//ラジオボタンの値を格納している
-
+            }
+        }
+            /*
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     DateTime targetDate = DateTime.Now.Date;
@@ -124,12 +126,7 @@ namespace calenderApp
                         UpDatePanel(row, column, StatusVal);
                     }
                 }
-            }
-        
-            else
-            {
-                     this.Close();
-            }
+            }       
         }
 
         private void UpDatePanel(int row, int columun, int status)    //クリックされたlabelだけ表示を更新するメソッド
@@ -153,7 +150,7 @@ namespace calenderApp
             }
         }
 
-
+*/
         private void SelectShowStatus()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -204,7 +201,7 @@ namespace calenderApp
 
 
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        public void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
 
         }
@@ -218,9 +215,9 @@ namespace calenderApp
         {
             changedDateStatus();
         }
-       // テーブルの表示をいったんクリアにしないとうまくかない
+        // テーブルの表示をいったんクリアにしないとうまくかない
 
-        
+
         private void changedDateStatus()
         {
             DateTime dateTime = dateTimePicker1.Value;
@@ -232,16 +229,16 @@ namespace calenderApp
                     int rowIndexRemove = i;
                     int columnIndexRemove = j;
                     Control controlToRemove = tableLayoutPanel1.GetControlFromPosition(columnIndexRemove, rowIndexRemove);
-                    if(controlToRemove != null)
+                    if (controlToRemove != null)
                     {
-                        tableLayoutPanel1.Controls.Remove(controlToRemove); 
+                        tableLayoutPanel1.Controls.Remove(controlToRemove);
                     }
 
                 }
             }
-            for(int k = 1; k < 32; k++)
+            for (int k = 1; k < 32; k++)
             {
-               
+
                 Label label = new Label();
                 label.Text = dateTime.Day.ToString();
                 label.Dock = DockStyle.Fill;
@@ -258,7 +255,7 @@ namespace calenderApp
                     DateTime targetDate = dateTimePicker1.Value.Date;
                     for (int i = 1; i < 32; i++)
                     {
-                        
+
                         using (SqlCommand command = new SqlCommand(selectQuery, connection))
                         {
                             int UserID = 1000 + j;
@@ -294,6 +291,6 @@ namespace calenderApp
                 }
             }
         }
-        
+
     }
 }
