@@ -1,4 +1,5 @@
 using System.Data.SqlClient;
+using System.Windows.Forms;
 
 namespace calenderApp
 {
@@ -14,16 +15,17 @@ namespace calenderApp
         Label namelabel5 = new Label();
         Label namelabel6 = new Label();
         Label namelabel7 = new Label();
-        CustomDialog customDialog;
-
+        Panel clickedPanel;
+        int row;
+        int column;
+       
 
         public Form1()
         {
             InitializeComponent();
             Load += Form1_Load;
-
         }
-
+        
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -83,17 +85,19 @@ namespace calenderApp
             DialogResult result = MessageBox.Show("ステータスを変更しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (result == DialogResult.OK)
             {
-                customDialog = new CustomDialog();
+                clickedPanel = (Panel)sender;
+                row = tableLayoutPanel1.GetRow(clickedPanel);
+                column = tableLayoutPanel1.GetColumn(clickedPanel);
+                CustomDialog customDialog = new CustomDialog(this);
                 customDialog.ShowDialog();
             }
         }
 
-        private void UpDatePanel(int row, int columun, int status)    //クリックされたlabelだけ表示を更新するメソッド
+        private void UpDatePanel(int row, int columun, int status)    //クリックされたPanellだけ表示を更新するメソッド
         {
             Control control = tableLayoutPanel1.GetControlFromPosition(columun, row);
-            if (control is Panel panel)    //パターンマッチでcontrolがLabelにキャストできるかチェックしている
+            if (control is Panel panel)    //パターンマッチでcontrolがPanelにキャストできるかチェックしている
             {
-
                 if (status == 0)
                 {
                     panel.BackColor = Color.Blue;
@@ -109,49 +113,40 @@ namespace calenderApp
             }
         }
 
-        public void PanelClick(object sender, EventArgs e)
+        public void PanelClickUpdate(int returnVal)
         {
-            Panel clickedPanel = (Panel)sender;
+            int result2 = returnVal;
 
-            int row = tableLayoutPanel1.GetRow(clickedPanel);
-            int column = tableLayoutPanel1.GetColumn(clickedPanel);
-
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-
-                int result2 = customDialog.returnVal;
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                DateTime targetDate = DateTime.Now.Date;
+                targetDate = targetDate.AddDays(column - 1);
+                int UserID = row + 1000;
+                int StatusVal = 1;
+                string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate AND UserID = @UserID;";
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    DateTime targetDate = DateTime.Now.Date;
-                    targetDate = targetDate.AddDays(column - 1);
-                    int UserID = row + 1000;
-                    int StatusVal = 1;
-                    string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate AND UserID = @UserID;";//ラジオボタンの値をStatusのあたいとして更新する
-                    using (SqlCommand command = new SqlCommand(query, connection))
+
+                    if (result2 == 0)
                     {
-
-                        if (result2 == 0)
-                        {
-                            StatusVal = 0;
-                        }
-                        else if (result2 == 1)
-                        {
-                            StatusVal = 1;
-                        }
-                        else if (result2 == 2)
-                        {
-                            StatusVal = 2;
-                        }
-
-                        connection.Open();
-                        command.Parameters.AddWithValue("@UserID", UserID);
-                        command.Parameters.AddWithValue("@targetDate", targetDate);
-                        command.Parameters.AddWithValue("@Status", StatusVal);
-                        command.ExecuteScalar();
-                        MessageBox.Show("更新されました。", "確認", MessageBoxButtons.OK);
-
-                        UpDatePanel(row, column, StatusVal);
+                        StatusVal = 0;
                     }
+                    else if (result2 == 1)
+                    {
+                        StatusVal = 1;
+                    }
+                    else if (result2 == 2)
+                    {
+                        StatusVal = 2;
+                    }
+                    connection.Open();
+                    command.Parameters.AddWithValue("@UserID", UserID);
+                    command.Parameters.AddWithValue("@targetDate", targetDate);
+                    command.Parameters.AddWithValue("@Status", StatusVal);
+                    command.ExecuteScalar();
+                    MessageBox.Show("更新されました。", "完了", MessageBoxButtons.OK);
+
+                    UpDatePanel(row, column, StatusVal);
                 }
             }
         }
@@ -219,9 +214,7 @@ namespace calenderApp
         {
             changedDateStatus();
         }
-        // テーブルの表示をいったんクリアにしないとうまくかない
-
-
+        
         private void changedDateStatus()
         {
             DateTime dateTime = dateTimePicker1.Value;
@@ -237,12 +230,10 @@ namespace calenderApp
                     {
                         tableLayoutPanel1.Controls.Remove(controlToRemove);
                     }
-
                 }
             }
             for (int k = 1; k < 32; k++)
             {
-
                 Label label = new Label();
                 label.Text = dateTime.Day.ToString();
                 label.Dock = DockStyle.Fill;
@@ -251,7 +242,6 @@ namespace calenderApp
             }
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-
                 connection.Open();
                 String selectQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate and UserID = @UserID;";
                 for (int j = 1; j < 8; j++)
@@ -259,7 +249,6 @@ namespace calenderApp
                     DateTime targetDate = dateTimePicker1.Value.Date;
                     for (int i = 1; i < 32; i++)
                     {
-
                         using (SqlCommand command = new SqlCommand(selectQuery, connection))
                         {
                             int UserID = 1000 + j;
@@ -295,6 +284,57 @@ namespace calenderApp
                 }
             }
         }
+    }
+}/*
+private void CreateControls()
+{
+    // ラベルやパネルの生成ループ
+    for (int i = 0; i < 7; i++)
+    {
+        Label companyLabel = new Label
+        {
+            TextAlign = ContentAlignment.MiddleCenter,
+            Text = $"会社名{i + 1}",
+            Dock = DockStyle.Fill
+        };
+        tableLayoutPanel1.Controls.Add(companyLabel, 0, i + 1);
+    }
 
+    DateTime currentDate = DateTime.Now.Date;
+    for (int i = 1; i < 32; i++)
+    {
+        Label dateLabel = new Label
+        {
+            Text = currentDate.Day.ToString(),
+            Dock = DockStyle.Fill
+        };
+        tableLayoutPanel1.Controls.Add(dateLabel, i, 0);
+        currentDate = currentDate.AddDays(1);
     }
 }
+
+// ステータス値に対応する色を返す
+private Color GetStatusColor(int status)
+{
+    switch (status)
+    {
+        case 0:
+            return Color.Blue;
+        case 1:
+            return Color.Yellow;
+        case 2:
+            return Color.Red;
+        default:
+            return Color.White; // デフォルトの色
+    }
+}
+
+// クリックされたパネルのステータスを更新
+private void UpdatePanel(int row, int column, int status)
+{
+    Control control = tableLayoutPanel1.GetControlFromPosition(column, row);
+    if (control is Panel panel)
+    {
+        panel.BackColor = GetStatusColor(status);
+    }
+}*/

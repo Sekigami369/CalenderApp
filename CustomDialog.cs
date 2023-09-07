@@ -4,15 +4,20 @@
     {
         string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
         public CustomDialog customDialog;
-        public int returnVal = 0;
         Form1 form1;
+
         public CustomDialog()
         {
             InitializeComponent();
-            form1 = new Form1();
+           
         }
 
+        public CustomDialog(Form1 form1)
+        {
+            InitializeComponent();
+            this.form1 = form1;
 
+        }
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -36,9 +41,7 @@
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-
-
+            int returnVal = 0;
             if (radioButton1.Checked == true)
             {
                 returnVal = 0;
@@ -51,8 +54,8 @@
             {
                 returnVal = 2;
             }
-            form1.PanelClick();//Form1から呼び出したい  
-
+            form1.PanelClickUpdate(returnVal);
+            this.Close();
         }
 
         private void button2_Click(object sender, EventArgs e)
