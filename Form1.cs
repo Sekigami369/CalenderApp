@@ -143,6 +143,7 @@ namespace calenderApp
                     command.Parameters.AddWithValue("@UserID", UserID);
                     command.Parameters.AddWithValue("@targetDate", targetDate);
                     command.Parameters.AddWithValue("@Status", StatusVal);
+                    command.CommandText = query;
                     command.ExecuteScalar();
                     MessageBox.Show("çXêVÇ≥ÇÍÇ‹ÇµÇΩÅB", "äÆóπ", MessageBoxButtons.OK);
 
