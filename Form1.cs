@@ -1,5 +1,5 @@
-using System.Data.SqlClient;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace calenderApp
 {
@@ -18,14 +18,14 @@ namespace calenderApp
         Panel clickedPanel;
         int row;
         int column;
-       
+
 
         public Form1()
         {
             InitializeComponent();
             Load += Form1_Load;
         }
-        
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -215,7 +215,7 @@ namespace calenderApp
         {
             changedDateStatus();
         }
-        
+
         private void changedDateStatus()
         {
             DateTime dateTime = dateTimePicker1.Value;
@@ -284,6 +284,11 @@ namespace calenderApp
                     }
                 }
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
