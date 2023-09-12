@@ -1,4 +1,3 @@
-using System.Windows.Forms;
 using System.Data.SqlClient;
 
 namespace calenderApp
@@ -7,7 +6,7 @@ namespace calenderApp
     {
 
         DateTime currentDate = DateTime.Now.Date;
-        private string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
+        public string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
         Label namelabel1 = new Label();
         Label namelabel2 = new Label();
         Label namelabel3 = new Label();
@@ -113,7 +112,7 @@ namespace calenderApp
             }
         }
 
-        public void PanelClickUpdate(int returnVal)
+        public void PanelClickUpdate(int returnVal)　//色のついたパネルをクリックして色を変えるメソッド
         {
             int result2 = returnVal;
 
@@ -151,7 +150,7 @@ namespace calenderApp
                 }
             }
         }
-        private void SelectShowStatus()
+        private void SelectShowStatus()　　//当日日付のカレンダーを表示する
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -201,22 +200,7 @@ namespace calenderApp
 
 
 
-        public void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            changedDateStatus();
-        }
-
-        private void changedDateStatus()
+        private void changedDateStatus()  //選択した３１日間のカレンダーにする
         {
             DateTime dateTime = dateTimePicker1.Value;
 
@@ -288,7 +272,23 @@ namespace calenderApp
 
         private void button2_Click(object sender, EventArgs e)
         {
+            BatchUpdater batchUpdater = new BatchUpdater(this);
+            batchUpdater.ShowDialog(this);
+        }
 
+        public void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            changedDateStatus();
         }
     }
 }

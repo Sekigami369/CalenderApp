@@ -9,7 +9,7 @@
         public CustomDialog()
         {
             InitializeComponent();
-           
+
         }
 
         public CustomDialog(Form1 form1)

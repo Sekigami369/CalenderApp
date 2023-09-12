@@ -130,16 +130,6 @@
             comboBox1.Size = new Size(180, 23);
             comboBox1.TabIndex = 8;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
-            comboBox1.Items.AddRange(new object[]
-            {
-                "会社名1", 
-                "会社名2", 
-                "会社名3", 
-                "会社名4", 
-                "会社名5", 
-                "会社名6", 
-                "会社名7"
-            });
             // 
             // label2
             // 
