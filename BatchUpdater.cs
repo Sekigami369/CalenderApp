@@ -25,7 +25,7 @@ namespace calenderApp
 
             foreach (string factID in factoryID.Keys)
             {
-                comboBox1.Items.Add(factID);
+                comboBox1.Items.Add(factID);  //コンボボックスにkeyのみ表示させている
             }
         }
 
@@ -46,7 +46,7 @@ namespace calenderApp
             TimeSpan dateDiff = endDate - startDate;
             int diffDays = dateDiff.Days;      //更新する日数を取得
             int returnVal = 0;
-            int factID;
+            int factID = 0;  //IDが取得できなかったとき何も影響しない整数で初期化
 
 
             if (radioButton1.Checked == true)
@@ -73,11 +73,27 @@ namespace calenderApp
                 }
 
             }
-
-            using(SqlConnection conn = new SqlConnection(form1.connectionString))
+            DialogResult result = MessageBox.Show("まとめてステータスを更新しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (result == DialogResult.OK)
             {
-                string query = "UPDATE ";
+                using (SqlConnection conn = new SqlConnection(form1.connectionString))
+                {
+                    string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate AND UserID = @UserID;";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        conn.Open();
+                        cmd.Parameters.AddWithValue("@Status", returnVal);
+                        cmd.Parameters.AddWithValue("@targetDate", startDate);
+                        cmd.Parameters.AddWithValue("@UserID", factID);
+                        for (int i = 0; i < diffDays; i++)
+                        {
+                            cmd.ExecuteNonQuery();
+                            startDate = startDate.AddDays(1);
+                        }
+                    }
+                }
             }
+
         }
 
         private void button2_Click(object sender, EventArgs e)

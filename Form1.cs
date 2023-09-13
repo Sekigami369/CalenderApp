@@ -17,12 +17,14 @@ namespace calenderApp
         Panel clickedPanel;
         int row;
         int column;
+        
 
 
         public Form1()
         {
             InitializeComponent();
             Load += Form1_Load;
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -274,6 +276,7 @@ namespace calenderApp
         {
             BatchUpdater batchUpdater = new BatchUpdater(this);
             batchUpdater.ShowDialog(this);
+
         }
 
         public void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
