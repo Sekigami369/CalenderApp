@@ -43,6 +43,8 @@ namespace calenderApp
         {
             DateTime startDate = dateTimePicker1.Value;
             DateTime endDate = dateTimePicker2.Value;
+            TimeSpan dateDiff = endDate - startDate;
+            int diffDays = dateDiff.Days;      //更新する日数を取得
             int returnVal = 0;
             int factID;
 
