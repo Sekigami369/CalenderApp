@@ -138,7 +138,7 @@
             label2.Name = "label2";
             label2.Size = new Size(42, 15);
             label2.TabIndex = 9;
-            label2.Text = "ID選択";
+            label2.Text = "会社名選択";
             label2.Click += label2_Click;
             // 
             // BatchUpdater

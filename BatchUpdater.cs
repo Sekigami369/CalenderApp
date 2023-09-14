@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Windows.Forms.VisualStyles;
 
 namespace calenderApp
 {
@@ -6,6 +7,7 @@ namespace calenderApp
     {
         Form1 form1;
         Dictionary<string, int> factoryID = new Dictionary<string, int>();
+        string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
 
         public BatchUpdater()
         {
@@ -67,16 +69,21 @@ namespace calenderApp
             {
                 string selectItemKey = comboBox1.SelectedItem.ToString();
 
-                if (factoryID.ContainsKey(selectItemKey))
+                if (factoryID.ContainsKey(selectItemKey))  //dictionaryに狙ったkeyがあるかチェックする
                 {
-                    factID = factoryID[selectItemKey];
+                    factID = factoryID[selectItemKey];　　//keykaravalueを取り出す
                 }
 
             }
+            else
+            {
+                MessageBox.Show("会社名を選択してください");
+            }
+
             DialogResult result = MessageBox.Show("まとめてステータスを更新しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (result == DialogResult.OK)
             {
-                using (SqlConnection conn = new SqlConnection(form1.connectionString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate AND UserID = @UserID;";
                     using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -85,15 +92,19 @@ namespace calenderApp
                         cmd.Parameters.AddWithValue("@Status", returnVal);
                         cmd.Parameters.AddWithValue("@targetDate", startDate);
                         cmd.Parameters.AddWithValue("@UserID", factID);
-                        for (int i = 0; i < diffDays; i++)
-                        {
-                            cmd.ExecuteNonQuery();
+
+                        for (int i = 0; i < diffDays + 1; i++)
+                        { 
+                            int count = cmd.ExecuteNonQuery();
+                            
                             startDate = startDate.AddDays(1);
                         }
                     }
                 }
+                MessageBox.Show("更新終了");
             }
-
+            Console.WriteLine("count件データベースに影響を与えた");
+            this.Close();
         }
 
         private void button2_Click(object sender, EventArgs e)

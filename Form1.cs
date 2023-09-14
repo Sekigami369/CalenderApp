@@ -6,7 +6,7 @@ namespace calenderApp
     {
 
         DateTime currentDate = DateTime.Now.Date;
-        public string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
+        string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
         Label namelabel1 = new Label();
         Label namelabel2 = new Label();
         Label namelabel3 = new Label();
@@ -144,8 +144,7 @@ namespace calenderApp
                     command.Parameters.AddWithValue("@UserID", UserID);
                     command.Parameters.AddWithValue("@targetDate", targetDate);
                     command.Parameters.AddWithValue("@Status", StatusVal);
-                    command.CommandText = query;
-                    command.ExecuteScalar();
+                    command.ExecuteNonQuery();
                     MessageBox.Show("çXêVÇ≥ÇÍÇ‹ÇµÇΩÅB", "äÆóπ", MessageBoxButtons.OK);
 
                     UpDatePanel(row, column, StatusVal);
@@ -275,7 +274,8 @@ namespace calenderApp
         private void button2_Click(object sender, EventArgs e)
         {
             BatchUpdater batchUpdater = new BatchUpdater(this);
-            batchUpdater.ShowDialog(this);
+            batchUpdater.ShowDialog();
+
 
         }
 
