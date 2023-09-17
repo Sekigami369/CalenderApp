@@ -1,5 +1,4 @@
 ﻿using System.Data.SqlClient;
-using System.Windows.Forms.VisualStyles;
 
 namespace calenderApp
 {
@@ -7,7 +6,6 @@ namespace calenderApp
     {
         Form1 form1;
         Dictionary<string, int> factoryID = new Dictionary<string, int>();
-        string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
 
         public BatchUpdater()
         {
@@ -17,6 +15,11 @@ namespace calenderApp
         {
             InitializeComponent();
             this.form1 = form1;
+           
+        }
+
+        private void BatchUpdater_Load(object sender, EventArgs e)
+        {
             factoryID.Add("会社名1", 1001);
             factoryID.Add("会社名2", 1002);
             factoryID.Add("会社名3", 1003);
@@ -27,7 +30,9 @@ namespace calenderApp
 
             foreach (string factID in factoryID.Keys)
             {
-                comboBox1.Items.Add(factID);  //コンボボックスにkeyのみ表示させている
+
+                //コンボボックスにkeyのみ表示させている
+                comboBox1.Items.Add(factID);
             }
         }
 
@@ -44,66 +49,79 @@ namespace calenderApp
         private void button1_Click(object sender, EventArgs e)
         {
             DateTime startDate = dateTimePicker1.Value;
-            DateTime endDate = dateTimePicker2.Value;
-            TimeSpan dateDiff = endDate - startDate;
-            int diffDays = dateDiff.Days;      //更新する日数を取得
-            int returnVal = 0;
-            int factID = 0;  //IDが取得できなかったとき何も影響しない整数で初期化
+            DateTime endDate   = dateTimePicker2.Value;
+
+            startDate = startDate.AddDays(-1);
+
+            int returnStatus = 0;
+
+            int factID = 0; 
 
 
             if (radioButton1.Checked == true)
             {
-                returnVal = 0;
+                returnStatus = 0;
             }
             else if (radioButton2.Checked == true)
             {
-                returnVal = 1;
+                returnStatus = 1;
             }
             else if (radioButton3.Checked == true)
             {
-                returnVal = 2;
+                returnStatus = 2;
             }
 
 
-            if (comboBox1.SelectedItem != null)  //comboBoxからkeyを受け取ってvalueを取得する
+            if (comboBox1.SelectedItem != null)  
             {
+                //comboBoxからkeyを受け取ってvalueを取得する
                 string selectItemKey = comboBox1.SelectedItem.ToString();
 
-                if (factoryID.ContainsKey(selectItemKey))  //dictionaryに狙ったkeyがあるかチェックする
+                //dictionaryに狙ったkeyがあるかチェックする
+                if (factoryID.ContainsKey(selectItemKey)) 
                 {
-                    factID = factoryID[selectItemKey];　　//keykaravalueを取り出す
+
+                    //keykaravalueを取り出す
+                    factID = factoryID[selectItemKey];　　               
                 }
 
             }
             else
             {
                 MessageBox.Show("会社名を選択してください");
+                return;
             }
 
             DialogResult result = MessageBox.Show("まとめてステータスを更新しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (result == DialogResult.OK)
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                try
                 {
-                    string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate AND UserID = @UserID;";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlConnection conn = new SqlConnection(form1.connectionString))
                     {
-                        conn.Open();
-                        cmd.Parameters.AddWithValue("@Status", returnVal);
-                        cmd.Parameters.AddWithValue("@targetDate", startDate);
-                        cmd.Parameters.AddWithValue("@UserID", factID);
+                        string query = "UPDATE dateSchedule SET Status = @Status WHERE UserID = @UserID AND Dates BETWEEN @startDate AND @endDate;";
 
-                        for (int i = 0; i < diffDays + 1; i++)
-                        { 
-                            int count = cmd.ExecuteNonQuery();
-                            
-                            startDate = startDate.AddDays(1);
+                        conn.Open();
+                       
+                        using (SqlCommand command = new SqlCommand(query, conn))
+                        {
+
+                            command.Parameters.AddWithValue("@Status"   , returnStatus);
+                            command.Parameters.AddWithValue("@startDate", startDate);
+                            command.Parameters.AddWithValue("@endDate"  , endDate);
+                            command.Parameters.AddWithValue("@UserID"   , factID);
+
+                            command.ExecuteNonQuery();
+                          
                         }
                     }
                 }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("データベースに接続失敗" + ex.Message);
+                }
                 MessageBox.Show("更新終了");
             }
-            Console.WriteLine("count件データベースに影響を与えた");
             this.Close();
         }
 
@@ -113,11 +131,6 @@ namespace calenderApp
         }
 
         private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void BatchUpdater_Load(object sender, EventArgs e)
         {
 
         }

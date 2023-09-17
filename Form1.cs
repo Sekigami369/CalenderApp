@@ -6,7 +6,7 @@ namespace calenderApp
     {
 
         DateTime currentDate = DateTime.Now.Date;
-        string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
+        public string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
         Label namelabel1 = new Label();
         Label namelabel2 = new Label();
         Label namelabel3 = new Label();
@@ -17,14 +17,13 @@ namespace calenderApp
         Panel clickedPanel;
         int row;
         int column;
+
         
-
-
         public Form1()
         {
             InitializeComponent();
             Load += Form1_Load;
-            
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -78,7 +77,8 @@ namespace calenderApp
                 currentDate = currentDate.AddDays(1);
             }
 
-            SelectShowStatus();   //データベースからStatusの値を1行分取ってきて表示させる
+            //データベースからStatusの値を1行分取ってきて表示させる
+            SelectShowStatus();
 
         }
         private void Datalabel_Click(object sender, EventArgs e)
@@ -94,10 +94,13 @@ namespace calenderApp
             }
         }
 
-        private void UpDatePanel(int row, int columun, int status)    //クリックされたPanellだけ表示を更新するメソッド
+        //クリックされたPanellだけ表示を更新するメソッド
+        private void UpDatePanel(int row, int columun, int status)
         {
             Control control = tableLayoutPanel1.GetControlFromPosition(columun, row);
-            if (control is Panel panel)    //パターンマッチでcontrolがPanelにキャストできるかチェックしている
+
+            //パターンマッチでcontrolがPanelにキャストできるかチェックしている
+            if (control is Panel panel)
             {
                 if (status == 0)
                 {
@@ -114,7 +117,8 @@ namespace calenderApp
             }
         }
 
-        public void PanelClickUpdate(int returnVal)　//色のついたパネルをクリックして色を変えるメソッド
+        //色のついたパネルをクリックして色を変えるメソッド
+        public void PanelClickUpdate(int returnVal)
         {
             int result2 = returnVal;
 
@@ -151,7 +155,9 @@ namespace calenderApp
                 }
             }
         }
-        private void SelectShowStatus()　　//当日日付のカレンダーを表示する
+
+        //当日日付のカレンダーを表示する
+        private void SelectShowStatus()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -200,8 +206,8 @@ namespace calenderApp
         }
 
 
-
-        private void changedDateStatus()  //選択した３１日間のカレンダーにする
+        //選択した３１日間のカレンダーにする
+        private void changedDateStatus()
         {
             DateTime dateTime = dateTimePicker1.Value;
 
@@ -276,7 +282,7 @@ namespace calenderApp
             BatchUpdater batchUpdater = new BatchUpdater(this);
             batchUpdater.ShowDialog();
 
-
+            //SelectShowStatus();
         }
 
         public void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -293,5 +299,6 @@ namespace calenderApp
         {
             changedDateStatus();
         }
+
     }
 }
