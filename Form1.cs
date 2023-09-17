@@ -1,4 +1,6 @@
+using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics.Eventing.Reader;
 
 namespace calenderApp
 {
@@ -337,8 +339,77 @@ namespace calenderApp
             {
 
                 connection.Open();
-                String selectQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate and UserID = @UserID;";
+                String selectQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate and UserID = @UserID";
+                
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandText = "";
 
+                    command.Parameters.Add("@targetDate", SqlDbType.Date);
+                    command.Parameters.Add("@UserID", SqlDbType.Int);
+
+                    for(int i = 1; i < 18; i++)
+                    {
+                        DateTime targetDate = dateTimePicker1.Value.Date;
+                        for (int j = 1; j < 32; j++)
+                        {
+                            command.CommandText += selectQuery;
+
+                            if(i < 17 || j < 31)
+                            {
+                                command.CommandText += " UNION ALL ";
+                            }
+                            else if(i == 17 && j == 31)
+                            {
+                                command.CommandText += ";";
+                            }
+                            command.Parameters["@targetDate"].Value = targetDate;
+                            command.Parameters["@UserID"].Value = 1000 + i;
+                            targetDate = targetDate.AddDays(1);
+                        }
+                    }
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Object dateStatus = reader["Status"];
+
+                            if (dateStatus != null)
+                            {
+                                Panel datePanel = new Panel();
+
+                                if ((int)dateStatus == 0)
+                                {
+                                    datePanel.BackColor = Color.Blue;
+                                }
+                                else if ((int)dateStatus == 1)
+                                {
+                                    datePanel.BackColor = Color.Yellow;
+                                }
+                                else if ((int)dateStatus == 2)
+                                {
+                                    datePanel.BackColor = Color.Red;
+                                }
+                                datePanel.BorderStyle = BorderStyle.FixedSingle;
+                                datePanel.Dock = DockStyle.Fill;
+                                datePanel.Click += Datalabel_Click;
+                                for (int i = 1; i < 18; i++)
+                                {
+                                    for (int j = 1; j < 32; j++)
+                                    {
+                                        tableLayoutPanel1.Controls.Add(datePanel, j + 1, i);    //•\Ž¦‚ª‚¨‚©‚µ‚¢C³‚ª•K—v
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+
+                /*
                 for (int i = 1; i < 18; i++)
                 {
                     DateTime targetDate = dateTimePicker1.Value.Date;
@@ -351,7 +422,7 @@ namespace calenderApp
                             command.Parameters.AddWithValue("@UserID", UserID);
                             command.Parameters.AddWithValue("@targetDate", targetDate);
                             Object dateStatus = command.ExecuteScalar();
-
+                
                             if (dateStatus != null)
                             {
                                 Panel datePanel = new Panel();
@@ -374,10 +445,10 @@ namespace calenderApp
                                 tableLayoutPanel1.Controls.Add(datePanel, j + 1, i);
 
                             }
-                            targetDate = targetDate.AddDays(1);
+                           // targetDate = targetDate.AddDays(1);
                         }
-                    }
-                }
+                    }*/
+                
             }
         }
 
