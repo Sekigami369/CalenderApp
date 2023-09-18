@@ -37,7 +37,7 @@ namespace calenderApp
             factoryID.Add("会社名5 - 車体", 1015);
             factoryID.Add("会社名6 - 整備", 1016);
             factoryID.Add("会社名7 - 車体", 1017);
-            
+
             foreach (string factID in factoryID.Keys)
             {
 
