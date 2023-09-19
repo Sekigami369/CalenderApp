@@ -7,7 +7,8 @@ namespace calenderApp
 
         //DateTime currentDate = DateTime.Now.Date;
 
-        public string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
+        //public string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
+        public string connectionString = "Server=localhost\\SQLEXPRESS;Database=DBsekigami;Trusted_Connection=True;";
         Label namelabel1 = new Label();
         Label namelabel2 = new Label();
         Label namelabel3 = new Label();
