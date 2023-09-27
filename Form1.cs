@@ -1,3 +1,4 @@
+using System.Data;
 using System.Data.SqlClient;
 
 namespace calenderApp
@@ -8,6 +9,7 @@ namespace calenderApp
         //DateTime currentDate = DateTime.Now.Date;
 
         public string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
+        //public string connectionString = "Server=localhost\\SQLEXPRESS;Database=DBsekigami;Trusted_Connection=True;";
         Label namelabel1 = new Label();
         Label namelabel2 = new Label();
         Label namelabel3 = new Label();
@@ -276,6 +278,7 @@ namespace calenderApp
         //当日日付のカレンダーを表示する
         private void SelectShowStatus()
         {
+            /*
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
@@ -322,6 +325,48 @@ namespace calenderApp
                     }
                 }
             }
+            */
+            int[,] statsu = new int[16, 30]; 
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string selectQuery = "";
+                connection.Open();
+                {
+                    for (int i = 0; i < 17; i++)
+                    {
+                        DateTime targetDate = dateTimePicker1.Value.Date;
+                        int UserID = 1000 + i;
+                        String baseQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate and UserID = @UserID;";
+                        for (int j = 0; j < 31; j++)
+                        {
+                            using (SqlCommand command = new SqlCommand(baseQuery, connection))
+                            {
+                                command.Parameters.Add("@targetDate", SqlDbType.Date).Value = targetDate;
+                                command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
+
+                                selectQuery += command.CommandText;
+
+                                if (i < 17 || j < 31)
+                                {
+                                    selectQuery += " UNION ";
+                                }
+                                else if (i == 17 && j == 31)
+                                {
+                                    selectQuery += " ;";
+                                }
+                            }
+                        }
+                    }
+                    using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                    {
+
+                        //配列に実行した結果を格納して
+                        //表示させる
+
+                    }
+                }
+            }
+
         }
 
 
@@ -345,6 +390,7 @@ namespace calenderApp
 
                     for (int j = 1; j < 32; j++)
                     {
+
                         using (SqlCommand command = new SqlCommand(selectQuery, connection))
                         {
                             int UserID = 1000 + i;
@@ -376,8 +422,9 @@ namespace calenderApp
                             }
                             targetDate = targetDate.AddDays(1);
                         }
+
                     }
-                    
+
                 }
             }
         }
