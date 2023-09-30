@@ -1,12 +1,10 @@
-using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace calenderApp
 {
     public partial class Form1 : Form
     {
-
-        //DateTime currentDate = DateTime.Now.Date;
 
         public string connectionString = "Server=localhost;Database=MyDatabase;Trusted_Connection=true;";
         //public string connectionString = "Server=localhost\\SQLEXPRESS;Database=DBsekigami;Trusted_Connection=True;";
@@ -38,7 +36,7 @@ namespace calenderApp
         Panel clickedPanel;
         int row;
         int column;
-
+        int[,] selectStatusArray = new int[17, 31];
 
         public Form1()
         {
@@ -278,97 +276,114 @@ namespace calenderApp
         //当日日付のカレンダーを表示する
         private void SelectShowStatus()
         {
-            /*
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
                 connection.Open();
-                String selectQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate and UserID = @UserID;";
+                string selectQuery = "SELECT Status FROM dateSchedule WHERE Dates BETWEEN  @startDate AND @endDate AND UserID BETWEEN 1001 AND 1017;";
 
-                for (int i = 1; i < 18; i++)
+                DateTime startDate = dateTimePicker1.Value.Date;
+                DateTime endDate = startDate.AddDays(31);
+
+                int dateStatus;
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
                 {
-                    DateTime targetDate = DateTime.Now.Date;
+                    // int UserID = 1000 + i;
+                    //command.Parameters.AddWithValue("@UserID", UserID);
 
-                    for (int j = 1; j < 32; j++)
-                    {
-                        using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                    List<List<int>> statusDataList = new List<List<int>>();
+
+                    command.Parameters.AddWithValue("@startDate", startDate);
+                    command.Parameters.AddWithValue("@endDate", endDate);
+
+                    //Object statusValue = command.ExecuteScalar();
+
+                    //データベースから取得したデータを１７件３１個のリストデータを作る
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    { 
+                        List<int> statusList = new List<int>();
+                        
+
+                        for (int j = 0; j < reader.FieldCount; j++)
                         {
-                            int UserID = 1000 + i;
-                            command.Parameters.AddWithValue("@UserID", UserID);
-                            command.Parameters.AddWithValue("@targetDate", targetDate);
-                            Object dateStatus = command.ExecuteScalar();
+
+                            //データが存在しないという例外が出る
+
+                            int statusValue = reader.GetInt32(j);
+                            if (statusList.Count% 31 == 0)
+                            {
+                                statusList.Add(statusValue);
+                                statusDataList.Add(statusList);
+                                statusList = new List<int>();   
+                            }
+                           
+                        }
+                    }              
+
+
+                    for (int i = 0; i < 17; i++)
+                    {
+                        for (int j = 0; j < 31; j++)
+                        {
+                            dateStatus = statusDataList[i][j];
 
                             if (dateStatus != null)
                             {
                                 Panel datePanel = new Panel();
 
-                                if ((int)dateStatus == 0)
+                                if (dateStatus == 0)
                                 {
                                     datePanel.BackColor = Color.Blue;
                                 }
-                                else if ((int)dateStatus == 1)
+                                else if (dateStatus == 1)
                                 {
                                     datePanel.BackColor = Color.Yellow;
                                 }
-                                else if ((int)dateStatus == 2)
+                                else
                                 {
                                     datePanel.BackColor = Color.Red;
                                 }
+
                                 datePanel.BorderStyle = BorderStyle.FixedSingle;
                                 datePanel.Dock = DockStyle.Fill;
                                 datePanel.Click += Datalabel_Click;
-                                tableLayoutPanel1.Controls.Add(datePanel, j + 1, i);
+                                tableLayoutPanel1.Controls.Add(datePanel, j + 2, i + 1);
 
                             }
-                            targetDate = targetDate.AddDays(1);
                         }
                     }
                 }
-            }
-            */
-            int[,] statsu = new int[16, 30]; 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string selectQuery = "";
-                connection.Open();
+
+
+                /*
+                if (dateStatus != null)
                 {
-                    for (int i = 0; i < 17; i++)
+                    Panel datePanel = new Panel();
+
+                    if ((int)dateStatus == 0)
                     {
-                        DateTime targetDate = dateTimePicker1.Value.Date;
-                        int UserID = 1000 + i;
-                        String baseQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate and UserID = @UserID;";
-                        for (int j = 0; j < 31; j++)
-                        {
-                            using (SqlCommand command = new SqlCommand(baseQuery, connection))
-                            {
-                                command.Parameters.Add("@targetDate", SqlDbType.Date).Value = targetDate;
-                                command.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
-
-                                selectQuery += command.CommandText;
-
-                                if (i < 17 || j < 31)
-                                {
-                                    selectQuery += " UNION ";
-                                }
-                                else if (i == 17 && j == 31)
-                                {
-                                    selectQuery += " ;";
-                                }
-                            }
-                        }
+                        datePanel.BackColor = Color.Blue;
                     }
-                    using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                    else if ((int)dateStatus == 1)
                     {
-
-                        //配列に実行した結果を格納して
-                        //表示させる
-
+                        datePanel.BackColor = Color.Yellow;
                     }
+                    else if ((int)dateStatus == 2)
+                    {
+                        datePanel.BackColor = Color.Red;
+                    }
+                    datePanel.BorderStyle = BorderStyle.FixedSingle;
+                    datePanel.Dock = DockStyle.Fill;
+                    datePanel.Click += Datalabel_Click;
+                    //tableLayoutPanel1.Controls.Add(datePanel, j + 1, i);
+
                 }
+                */
             }
+
 
         }
-
 
         //選択した３１日間のカレンダーにする
         private void changedDateStatus()
