@@ -4,13 +4,10 @@ namespace calenderApp
 {
     public partial class BatchUpdater : Form
     {
+
         Form1 form1;
         Dictionary<string, int> factoryID = new Dictionary<string, int>();
-
-        public BatchUpdater()
-        {
-
-        }
+       
         public BatchUpdater(Form1 form1)
         {
             InitializeComponent();
@@ -58,9 +55,10 @@ namespace calenderApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DateTime startDate = dateTimePicker1.Value;
-            DateTime endDate = dateTimePicker2.Value;
+            DateTime startDate = dateTimePicker1.Value.Date;
+            DateTime endDate = dateTimePicker2.Value.Date;
 
+            
             startDate = startDate.AddDays(-1);
 
             int returnStatus = 0;
@@ -122,7 +120,7 @@ namespace calenderApp
                             command.Parameters.AddWithValue("@UserID", factID);
 
                             command.ExecuteNonQuery();
-
+                            
                         }
                     }
                 }
@@ -132,6 +130,7 @@ namespace calenderApp
                 }
                 MessageBox.Show("更新終了");
             }
+            form1.BatchUpdaterStartDate = startDate;
             this.Close();
         }
 

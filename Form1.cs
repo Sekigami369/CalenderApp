@@ -1,5 +1,4 @@
 using System.Data.SqlClient;
-using System.Linq;
 
 namespace calenderApp
 {
@@ -36,7 +35,9 @@ namespace calenderApp
         Panel clickedPanel;
         int row;
         int column;
-        int[,] selectStatusArray = new int[17, 31];
+        public DateTime BatchUpdaterStartDate { get; set; }
+
+
 
         public Form1()
         {
@@ -47,15 +48,10 @@ namespace calenderApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
-            tableLayoutPanel1.ColumnCount = 36;
-            tableLayoutPanel1.RowCount = 30;
-
-
-            CalenderDateShow();
+            DateTime startDate = dateTimePicker1.Value.Date;
+            CalenderDateShow(startDate);
             FactoryNameShow();
-            SelectShowStatus();
-
+            SelectShowStatus(startDate);
         }
 
         //会社名・部署名を表示させるメソッド
@@ -64,135 +60,135 @@ namespace calenderApp
             namelabel1.TextAlign = ContentAlignment.MiddleCenter;
             namelabel1.Text = "会社名1";
             namelabel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel1, 0, 1);
+            tableLayoutPanel1.Controls.Add(namelabel1, 0, 0);
 
             namelabel2.TextAlign = ContentAlignment.MiddleCenter;
             namelabel2.Text = "会社名2";
             namelabel2.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel2, 0, 4);
+            tableLayoutPanel1.Controls.Add(namelabel2, 0, 3);
 
             namelabel3.TextAlign = ContentAlignment.MiddleCenter;
             namelabel3.Text = "会社名3";
             namelabel3.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel3, 0, 7);
+            tableLayoutPanel1.Controls.Add(namelabel3, 0, 6);
 
             namelabel4.TextAlign = ContentAlignment.MiddleCenter;
             namelabel4.Text = "会社名4";
             namelabel4.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel4, 0, 11);
+            tableLayoutPanel1.Controls.Add(namelabel4, 0, 10);
 
             namelabel5.TextAlign = ContentAlignment.MiddleCenter;
             namelabel5.Text = "会社名5";
             namelabel5.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel5, 0, 15);
+            tableLayoutPanel1.Controls.Add(namelabel5, 0, 14);
 
             namelabel6.TextAlign = ContentAlignment.MiddleCenter;
             namelabel6.Text = "会社名6";
             namelabel6.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel6, 0, 16);
+            tableLayoutPanel1.Controls.Add(namelabel6, 0, 15);
 
             namelabel7.TextAlign = ContentAlignment.MiddleCenter;
             namelabel7.Text = "会社名7";
             namelabel7.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel7, 0, 17);
+            tableLayoutPanel1.Controls.Add(namelabel7, 0, 16);
 
             namelabel8.TextAlign = ContentAlignment.MiddleCenter;
             namelabel8.Text = "車体";
             namelabel8.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel8, 1, 1);
+            tableLayoutPanel1.Controls.Add(namelabel8, 1, 0);
 
             namelabel9.TextAlign = ContentAlignment.MiddleCenter;
             namelabel9.Text = "整備";
             namelabel9.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel9, 1, 2);
+            tableLayoutPanel1.Controls.Add(namelabel9, 1, 1);
 
             namelabel10.TextAlign = ContentAlignment.MiddleCenter;
             namelabel10.Text = "塗装";
             namelabel10.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel10, 1, 3);
+            tableLayoutPanel1.Controls.Add(namelabel10, 1, 2);
 
             namelabel11.TextAlign = ContentAlignment.MiddleCenter;
             namelabel11.Text = "車体";
             namelabel11.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel11, 1, 4);
+            tableLayoutPanel1.Controls.Add(namelabel11, 1, 3);
 
             namelabel12.TextAlign = ContentAlignment.MiddleCenter;
             namelabel12.Text = "油圧";
             namelabel12.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel12, 1, 5);
+            tableLayoutPanel1.Controls.Add(namelabel12, 1, 4);
 
             namelabel13.TextAlign = ContentAlignment.MiddleCenter;
             namelabel13.Text = "塗装";
             namelabel13.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel13, 1, 6);
+            tableLayoutPanel1.Controls.Add(namelabel13, 1, 5);
 
             namelabel14.TextAlign = ContentAlignment.MiddleCenter;
             namelabel14.Text = "車体";
             namelabel14.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel14, 1, 7);
+            tableLayoutPanel1.Controls.Add(namelabel14, 1, 6);
 
             namelabel15.TextAlign = ContentAlignment.MiddleCenter;
             namelabel15.Text = "整備";
             namelabel15.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel15, 1, 8);
+            tableLayoutPanel1.Controls.Add(namelabel15, 1, 7);
 
             namelabel16.TextAlign = ContentAlignment.MiddleCenter;
             namelabel16.Text = "塗装";
             namelabel16.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel16, 1, 9);
+            tableLayoutPanel1.Controls.Add(namelabel16, 1, 8);
 
             namelabel17.TextAlign = ContentAlignment.MiddleCenter;
             namelabel17.Text = "油圧";
             namelabel17.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel17, 1, 10);
+            tableLayoutPanel1.Controls.Add(namelabel17, 1, 9);
 
             namelabel18.TextAlign = ContentAlignment.MiddleCenter;
             namelabel18.Text = "車体";
             namelabel18.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel18, 1, 11);
+            tableLayoutPanel1.Controls.Add(namelabel18, 1, 10);
 
             namelabel19.TextAlign = ContentAlignment.MiddleCenter;
             namelabel19.Text = "整備";
             namelabel19.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel19, 1, 12);
+            tableLayoutPanel1.Controls.Add(namelabel19, 1, 11);
 
             namelabel20.TextAlign = ContentAlignment.MiddleCenter;
             namelabel20.Text = "塗装";
             namelabel20.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel20, 1, 13);
+            tableLayoutPanel1.Controls.Add(namelabel20, 1, 12);
 
             namelabel21.TextAlign = ContentAlignment.MiddleCenter;
             namelabel21.Text = "油圧";
             namelabel21.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel21, 1, 14);
+            tableLayoutPanel1.Controls.Add(namelabel21, 1, 13);
 
             namelabel22.TextAlign = ContentAlignment.MiddleCenter;
             namelabel22.Text = "車体";
             namelabel22.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel22, 1, 15);
+            tableLayoutPanel1.Controls.Add(namelabel22, 1, 14);
 
             namelabel23.TextAlign = ContentAlignment.MiddleCenter;
             namelabel23.Text = "整備";
             namelabel23.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel23, 1, 16);
+            tableLayoutPanel1.Controls.Add(namelabel23, 1, 15);
 
             namelabel24.TextAlign = ContentAlignment.MiddleCenter;
             namelabel24.Text = "車体";
             namelabel24.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Controls.Add(namelabel24, 1, 17);
+            tableLayoutPanel1.Controls.Add(namelabel24, 1, 16);
         }
 
 
         //カレンダーの日付部分を表示させるメソッド
-        private void CalenderDateShow()
+        private void CalenderDateShow(DateTime startDate)
         {
-            DateTime currentDate = dateTimePicker1.Value.Date;
+            DateTime currentDate = startDate;
             for (int i = 0; i < 31; i++)
             {
                 Label dateLabel = new Label();
                 dateLabel.Text = currentDate.Day.ToString();
                 dateLabel.Dock = DockStyle.Fill;
-                tableLayoutPanel1.Controls.Add(dateLabel, i + 2, 0);
+                tableLayoutPanel3.Controls.Add(dateLabel);
                 currentDate = currentDate.AddDays(1);
             }
 
@@ -204,8 +200,8 @@ namespace calenderApp
             if (result == DialogResult.OK)
             {
                 clickedPanel = (Panel)sender;
-                row = tableLayoutPanel1.GetRow(clickedPanel);
-                column = tableLayoutPanel1.GetColumn(clickedPanel);
+                row = tableLayoutPanel2.GetRow(clickedPanel);
+                column = tableLayoutPanel2.GetColumn(clickedPanel);
                 CustomDialog customDialog = new CustomDialog(this);
                 customDialog.ShowDialog();
             }
@@ -214,7 +210,7 @@ namespace calenderApp
         //クリックされたPanellだけ表示を更新するメソッド
         private void UpDatePanel(int row, int columun, int status)
         {
-            Control control = tableLayoutPanel1.GetControlFromPosition(columun, row);
+            Control control = tableLayoutPanel2.GetControlFromPosition(columun, row);
 
             //パターンマッチでcontrolがPanelにキャストできるかチェックしている
             if (control is Panel panel)
@@ -274,7 +270,7 @@ namespace calenderApp
         }
 
         //当日日付のカレンダーを表示する
-        private void SelectShowStatus()
+        private void SelectShowStatus(DateTime startDate)
         {
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -283,165 +279,64 @@ namespace calenderApp
                 connection.Open();
                 string selectQuery = "SELECT Status FROM dateSchedule WHERE Dates BETWEEN  @startDate AND @endDate AND UserID BETWEEN 1001 AND 1017;";
 
-                DateTime startDate = dateTimePicker1.Value.Date;
+
                 DateTime endDate = startDate.AddDays(31);
 
                 int dateStatus;
                 using (SqlCommand command = new SqlCommand(selectQuery, connection))
                 {
-                    // int UserID = 1000 + i;
-                    //command.Parameters.AddWithValue("@UserID", UserID);
-
-                    List<List<int>> statusDataList = new List<List<int>>();
-
                     command.Parameters.AddWithValue("@startDate", startDate);
                     command.Parameters.AddWithValue("@endDate", endDate);
 
-                    //Object statusValue = command.ExecuteScalar();
 
-                    //データベースから取得したデータを１７件３１個のリストデータを作る
                     using (SqlDataReader reader = command.ExecuteReader())
-                    { 
-                        List<int> statusList = new List<int>();
-                        
-
-                        for (int j = 0; j < reader.FieldCount; j++)
-                        {
-
-                            //データが存在しないという例外が出る
-
-                            int statusValue = reader.GetInt32(j);
-                            if (statusList.Count% 31 == 0)
-                            {
-                                statusList.Add(statusValue);
-                                statusDataList.Add(statusList);
-                                statusList = new List<int>();   
-                            }
-                           
-                        }
-                    }              
-
-
-                    for (int i = 0; i < 17; i++)
                     {
-                        for (int j = 0; j < 31; j++)
+                        while (reader.Read())
                         {
-                            dateStatus = statusDataList[i][j];
 
-                            if (dateStatus != null)
+                            for (int j = 0; j < reader.FieldCount; j++)
                             {
-                                Panel datePanel = new Panel();
+                                dateStatus = reader.GetInt32(j);
 
-                                if (dateStatus == 0)
+                                if (dateStatus != null)
                                 {
-                                    datePanel.BackColor = Color.Blue;
-                                }
-                                else if (dateStatus == 1)
-                                {
-                                    datePanel.BackColor = Color.Yellow;
-                                }
-                                else
-                                {
-                                    datePanel.BackColor = Color.Red;
-                                }
+                                    Panel datePanel = new Panel();
 
-                                datePanel.BorderStyle = BorderStyle.FixedSingle;
-                                datePanel.Dock = DockStyle.Fill;
-                                datePanel.Click += Datalabel_Click;
-                                tableLayoutPanel1.Controls.Add(datePanel, j + 2, i + 1);
+                                    if (dateStatus == 0)
+                                    {
+                                        datePanel.BackColor = Color.Blue;
+                                    }
+                                    else if (dateStatus == 1)
+                                    {
+                                        datePanel.BackColor = Color.Yellow;
+                                    }
+                                    else
+                                    {
+                                        datePanel.BackColor = Color.Red;
+                                    }
 
+                                    datePanel.BorderStyle = BorderStyle.FixedSingle;
+                                    datePanel.Dock = DockStyle.Fill;
+                                    datePanel.Click += Datalabel_Click;
+
+                                    tableLayoutPanel2.Controls.Add(datePanel);
+                                }
                             }
                         }
                     }
                 }
-
-
-                /*
-                if (dateStatus != null)
-                {
-                    Panel datePanel = new Panel();
-
-                    if ((int)dateStatus == 0)
-                    {
-                        datePanel.BackColor = Color.Blue;
-                    }
-                    else if ((int)dateStatus == 1)
-                    {
-                        datePanel.BackColor = Color.Yellow;
-                    }
-                    else if ((int)dateStatus == 2)
-                    {
-                        datePanel.BackColor = Color.Red;
-                    }
-                    datePanel.BorderStyle = BorderStyle.FixedSingle;
-                    datePanel.Dock = DockStyle.Fill;
-                    datePanel.Click += Datalabel_Click;
-                    //tableLayoutPanel1.Controls.Add(datePanel, j + 1, i);
-
-                }
-                */
             }
-
-
         }
 
         //選択した３１日間のカレンダーにする
         private void changedDateStatus()
         {
+            DateTime startDate = dateTimePicker1.Value.Date;
+            tableLayoutPanel3.Controls.Clear();
+            tableLayoutPanel2.Controls.Clear();
+            CalenderDateShow(startDate);
+            SelectShowStatus(startDate);
 
-            tableLayoutPanel1.Controls.Clear();
-            CalenderDateShow();
-            FactoryNameShow();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-
-                connection.Open();
-                String selectQuery = "SELECT Status FROM dateSchedule Where Dates = @targetDate and UserID = @UserID";
-
-                for (int i = 1; i < 18; i++)
-                {
-                    DateTime targetDate = dateTimePicker1.Value.Date;
-
-                    for (int j = 1; j < 32; j++)
-                    {
-
-                        using (SqlCommand command = new SqlCommand(selectQuery, connection))
-                        {
-                            int UserID = 1000 + i;
-                            command.Parameters.AddWithValue("@UserID", UserID);
-                            command.Parameters.AddWithValue("@targetDate", targetDate);
-                            Object dateStatus = command.ExecuteScalar();
-
-                            if (dateStatus != null)
-                            {
-                                Panel datePanel = new Panel();
-
-                                if ((int)dateStatus == 0)
-                                {
-                                    datePanel.BackColor = Color.Blue;
-                                }
-                                else if ((int)dateStatus == 1)
-                                {
-                                    datePanel.BackColor = Color.Yellow;
-                                }
-                                else if ((int)dateStatus == 2)
-                                {
-                                    datePanel.BackColor = Color.Red;
-                                }
-                                datePanel.BorderStyle = BorderStyle.FixedSingle;
-                                datePanel.Dock = DockStyle.Fill;
-                                datePanel.Click += Datalabel_Click;
-                                tableLayoutPanel1.Controls.Add(datePanel, j + 1, i);
-
-                            }
-                            targetDate = targetDate.AddDays(1);
-                        }
-
-                    }
-
-                }
-            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -449,15 +344,10 @@ namespace calenderApp
             BatchUpdater batchUpdater = new BatchUpdater(this);
             batchUpdater.ShowDialog();
 
-            tableLayoutPanel1.Controls.Clear();
-            CalenderDateShow();
-            FactoryNameShow();
-            SelectShowStatus();
-        }
-
-        public void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
+            tableLayoutPanel2.Controls.Clear();
+            tableLayoutPanel3.Controls.Clear();
+            CalenderDateShow(this.BatchUpdaterStartDate);
+            SelectShowStatus(this.BatchUpdaterStartDate);
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
@@ -468,6 +358,21 @@ namespace calenderApp
         private void button1_Click(object sender, EventArgs e)
         {
             changedDateStatus();
+        }
+
+        private void tableLayoutPanel1_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
