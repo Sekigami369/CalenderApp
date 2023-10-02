@@ -56,7 +56,7 @@
             // 
             // button2
             // 
-            button2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button2.Location = new Point(827, 23);
             button2.Name = "button2";
             button2.Size = new Size(97, 23);
@@ -100,7 +100,7 @@
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            tableLayoutPanel2.ColumnCount = 32;
+            tableLayoutPanel2.ColumnCount = 31;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
@@ -132,17 +132,9 @@
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 1F));
             tableLayoutPanel2.Location = new Point(183, 113);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 18;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 17F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 43F));
+            tableLayoutPanel2.RowCount = 17;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
@@ -153,7 +145,14 @@
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 1F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel2.Size = new Size(778, 512);
             tableLayoutPanel2.TabIndex = 6;
             tableLayoutPanel2.Paint += tableLayoutPanel2_Paint;
@@ -162,6 +161,7 @@
             // 
             tableLayoutPanel3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel3.ColumnCount = 32;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 55F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
@@ -193,13 +193,12 @@
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 1F));
-            tableLayoutPanel3.Location = new Point(183, 80);
+            tableLayoutPanel3.Location = new Point(128, 81);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 2;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 1F));
-            tableLayoutPanel3.Size = new Size(778, 33);
+            tableLayoutPanel3.Size = new Size(833, 33);
             tableLayoutPanel3.TabIndex = 7;
             tableLayoutPanel3.Paint += tableLayoutPanel3_Paint;
             // 
@@ -208,8 +207,8 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(979, 637);
-            Controls.Add(tableLayoutPanel3);
             Controls.Add(tableLayoutPanel2);
+            Controls.Add(tableLayoutPanel3);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(dateTimePicker1);

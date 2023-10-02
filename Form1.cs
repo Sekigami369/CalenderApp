@@ -183,12 +183,17 @@ namespace calenderApp
         private void CalenderDateShow(DateTime startDate)
         {
             DateTime currentDate = startDate;
-            for (int i = 0; i < 31; i++)
+            Label monthLabel = new Label();
+            monthLabel.Text = currentDate.Month.ToString() + "ŒŽ";
+            monthLabel.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Controls.Add(monthLabel, 0, 0);
+            for (int i = 1; i < 32; i++)
             {
+
                 Label dateLabel = new Label();
                 dateLabel.Text = currentDate.Day.ToString();
                 dateLabel.Dock = DockStyle.Fill;
-                tableLayoutPanel3.Controls.Add(dateLabel);
+                tableLayoutPanel3.Controls.Add(dateLabel, i, 0);
                 currentDate = currentDate.AddDays(1);
             }
 
@@ -238,8 +243,8 @@ namespace calenderApp
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 DateTime targetDate = DateTime.Now.Date;
-                targetDate = targetDate.AddDays(column - 1);
-                int UserID = row + 1000;
+                targetDate = targetDate.AddDays(column);
+                int UserID = row + 1001;
                 int StatusVal = 1;
                 string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate AND UserID = @UserID;";
                 using (SqlCommand command = new SqlCommand(query, connection))
@@ -280,9 +285,9 @@ namespace calenderApp
                 string selectQuery = "SELECT Status FROM dateSchedule WHERE Dates BETWEEN  @startDate AND @endDate AND UserID BETWEEN 1001 AND 1017;";
 
 
-                DateTime endDate = startDate.AddDays(31);
-
+                DateTime endDate = startDate.AddDays(30);
                 int dateStatus;
+
                 using (SqlCommand command = new SqlCommand(selectQuery, connection))
                 {
                     command.Parameters.AddWithValue("@startDate", startDate);
@@ -293,7 +298,6 @@ namespace calenderApp
                     {
                         while (reader.Read())
                         {
-
                             for (int j = 0; j < reader.FieldCount; j++)
                             {
                                 dateStatus = reader.GetInt32(j);

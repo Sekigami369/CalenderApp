@@ -57,9 +57,8 @@ namespace calenderApp
         {
             DateTime startDate = dateTimePicker1.Value.Date;
             DateTime endDate = dateTimePicker2.Value.Date;
-
             
-            startDate = startDate.AddDays(-1);
+            //startDate = startDate.AddDays(-1);
 
             int returnStatus = 0;
 
@@ -88,7 +87,6 @@ namespace calenderApp
                 //dictionaryに狙ったkeyがあるかチェックする
                 if (factoryID.ContainsKey(selectItemKey))
                 {
-
                     //keykaravalueを取り出す
                     factID = factoryID[selectItemKey];
                 }
