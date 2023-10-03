@@ -32,7 +32,7 @@ namespace calenderApp
         Label namelabel23 = new Label();
         Label namelabel24 = new Label();
 
-        Panel clickedPanel;
+        //Panel clickedPanel;
         int row;
         int column;
         public DateTime BatchUpdaterStartDate { get; set; }
@@ -204,7 +204,7 @@ namespace calenderApp
             DialogResult result = MessageBox.Show("ステータスを変更しますか？", "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (result == DialogResult.OK)
             {
-                clickedPanel = (Panel)sender;
+                Panel clickedPanel = (Panel)sender;
                 row = tableLayoutPanel2.GetRow(clickedPanel);
                 column = tableLayoutPanel2.GetColumn(clickedPanel);
                 CustomDialog customDialog = new CustomDialog(this);
@@ -244,7 +244,7 @@ namespace calenderApp
             {
                 DateTime targetDate = DateTime.Now.Date;
                 targetDate = targetDate.AddDays(column);
-                int UserID = row + 1001;
+                int UserID = row + 1000;
                 int StatusVal = 1;
                 string query = "UPDATE dateSchedule SET Status = @Status WHERE Dates = @targetDate AND UserID = @UserID;";
                 using (SqlCommand command = new SqlCommand(query, connection))
@@ -324,6 +324,7 @@ namespace calenderApp
                                     datePanel.Click += Datalabel_Click;
 
                                     tableLayoutPanel2.Controls.Add(datePanel);
+                                    //tableLayoutPanel2.Controls.Add(clickedPanel);
                                 }
                             }
                         }
