@@ -7,7 +7,7 @@ namespace calenderApp
 
         Form1 form1;
         Dictionary<string, int> factoryID = new Dictionary<string, int>();
-       
+
         public BatchUpdater(Form1 form1)
         {
             InitializeComponent();
@@ -57,7 +57,7 @@ namespace calenderApp
         {
             DateTime startDate = dateTimePicker1.Value.Date;
             DateTime endDate = dateTimePicker2.Value.Date;
-            
+
             //startDate = startDate.AddDays(-1);
 
             int returnStatus = 0;
@@ -118,7 +118,7 @@ namespace calenderApp
                             command.Parameters.AddWithValue("@UserID", factID);
 
                             command.ExecuteNonQuery();
-                            
+
                         }
                     }
                 }
