@@ -32,8 +32,8 @@ namespace calenderApp
         Label namelabel23 = new Label();
         Label namelabel24 = new Label();
                 
-        int row;
-        int column;
+        int row = 0;
+        int column = 0;
         public DateTime BatchUpdaterStartDate { get; set; }
 
 
@@ -308,12 +308,7 @@ namespace calenderApp
 
                                 Panel datePanel = new Panel();
 
-                                int row = j / totalColumns;
-                                int column = j % totalColumns;
-
-                                tableLayoutPanel2.SetRow(datePanel, row);
-                                tableLayoutPanel2.SetColumn(datePanel, column);
-
+                               
                                 if (dateStatus == 0)
                                 {
                                     datePanel.BackColor = Color.Blue;
@@ -332,8 +327,16 @@ namespace calenderApp
                                 datePanel.Click += Datalabel_Click;
 
                                 tableLayoutPanel2.Controls.Add(datePanel);
+                                tableLayoutPanel2.SetRow(datePanel, row);
+                                tableLayoutPanel2.SetColumn(datePanel, column);
 
+                                column++;
 
+                                if(column == 31)
+                                {
+                                    column = 0;
+                                    row++;
+                                }
                             }
                         }
                     }
